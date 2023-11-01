@@ -7,7 +7,7 @@ Ce guide explique comment pouvoir lancer ce logiciel sur votre ordinateur
 
 Avant de commencer, assurez-vous que vous avez installé les éléments suivants sur votre système :
 
-- [Python](https://www.python.org/downloads/): Le langage de programmation utilisé par Jupyter.
+- [Python](https://www.python.org/downloads/): Le langage de programmation utilisé par ce logiciel.
 
 ## Instructions
 
