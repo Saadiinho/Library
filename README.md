@@ -14,7 +14,7 @@ Avant de commencer, assurez-vous que vous avez installé les éléments suivants
 1. Clonez le référentiel :
 
    ```bash
-   git clone https://github.com/Saadiinho/Horror-Movies.git
+   git clone https://github.com/Saadiinho/Library.git
 
 2. Ouvrez votre terminal ou invite de commande.
   
