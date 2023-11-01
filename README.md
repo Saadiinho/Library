@@ -1,6 +1,6 @@
 # Library
 
-**Le projet n'est pas encore fini !**
+**Le projet n'est pas encore fini !**\n
 Ce guide explique comment pouvoir lancer ce logiciel sur votre ordinateur
 
 ## Prérequis
