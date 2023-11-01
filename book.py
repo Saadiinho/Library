@@ -43,9 +43,14 @@ def update_book(conn):
     except ValueError:
         print("Erreur : Vous devez entrer un chiffre.")
         return
-    title = input("Entrez le nouveau titre : (Laissez vide si le nom ne change pas) ")
-    author = input("Entrez le nouvel auteur : (Laissez vide s'il n'y en a pas) ")
-    genre = input("Entrez le nouveau genre : (Laissez vide s'il n'y en a pas) ")
+    query = "SELECT * FROM book WHERE id_book = " + str(id)
+    cursor.execute(query)
+    books = cursor.fetchall()
+    for book in books :
+        print(book)
+    title = input(f"Entrez le nouveau titre : ('{book[1]}' si le nom ne change pas) ")
+    author = input(f"Entrez le nouvel auteur : ('{book[2]}' s'il n'y en a pas) ")
+    genre = input(f"Entrez le nouveau genre : ('{book[3]}' s'il n'y en a pas) ")
     query = "UPDATE book SET title = %s, author = %s, genre = %s WHERE id_book = %s"
     cursor.execute(query, (title, author, genre, id))
     conn.commit()

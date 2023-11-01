@@ -1,18 +1,20 @@
 #Fonction qui permet à l'utilisateur de se connecter
-def connection(conn):
-    first_name = input("Entrez votre prénom :")
-    last_name = input("Entrez votre nom de famille :")
+import book as bk
+import exemplaire as ex
+
+
+def my_book(conn, id_user):
     cursor = conn.cursor()
-    query = "SELECT * FROM user WHERE first_name = '%s' AND last_name = '%s'" % (first_name, last_name)
+    query = """
+                SELECT copy.id_copy AS Identifiant, book.title AS Titre, book.author AS Auteur, book.genre AS Genre, copy.state AS Etat, copy.langue AS Langue 
+                FROM copy
+                JOIN user ON copy.id_user = user.id_user
+                JOIN book ON copy.id_book = book.id_book
+            """
     cursor.execute(query)
-    result = cursor.fetchone()
-    if result:
-        print("Connexion réussie.")
-    else:
-        print("L'utilisateur n'existe pas encore. Veuillez vous inscrire.")
-    # Fermeture du curseur et de la connexion
-    cursor.close()
-    conn.close()
+    rows = cursor.fetchall()
+    for row in rows:
+        print(row)
 
 
 #Fonction qui permet à l'utilisateur de s'inscrire
