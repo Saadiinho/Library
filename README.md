@@ -6,7 +6,7 @@ Ce guide explique comment pouvoir lancer ce logiciel sur votre ordinateur
 
 ## Prérequis
 
-**Les prérequis pour la base de données arrivent bientôt.**
+**Les prérequis pour la base de données (MySQL) arrivent bientôt.**
 
 Avant de commencer, assurez-vous que vous avez installé les éléments suivants sur votre système :
 
