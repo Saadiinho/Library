@@ -1,0 +1,77 @@
+#:import hex kivy.utils.get_color_from_hex
+#: set mainColor "#20244f"
+#: set couleurFonce "#161937" 
+
+LoginInterface:
+
+<HomeInterface>
+    canvas.before:
+        Color:
+            rgb:hex(couleurFonce)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    orientation:"vertical"
+    
+    Label:
+        text:"Bienvenue dans Library"
+        size_hint:1,0.3
+        font_size:58
+    BoxLayout:
+        orientation:"vertical"
+        padding:150
+        spacing:50
+        canvas.before:
+            Color:
+                rgb:hex(mainColor)
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        Button:
+            text:"Connexion"
+        Button:
+            text:"Inscription"
+        Button:
+            text:"Quitter"
+
+<LoginInterface>
+    canvas.before:
+        Color:
+            rgb:hex(couleurFonce)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    orientation:"vertical"
+    
+    Label:
+        text:"Connectez-vous"
+        size_hint:1,0.3
+        font_size:58
+    BoxLayout:
+        orientation:"vertical"
+        padding:150
+        spacing:50
+        canvas.before:
+            Color:
+                rgb:hex(mainColor)
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        BoxLayout:
+            orientation:"vertical"
+            BoxLayout:
+                orientation:"horizontal"
+                Label:
+                    text:"Nom"
+                TextInput:
+                    multiline:False
+        BoxLayout:
+            orientation:"vertical"
+            BoxLayout:
+                orientation:"horizontal"
+                Label:
+                    text:"Prénom "
+                TextInput:
+                    multiline:False
+        Button:
+            text:"Connexion"
