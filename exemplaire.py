@@ -86,33 +86,5 @@ class Copy:
         conn.commit()
         print(f"Livre avec l'id {id} supprimé avec succès.")
 
-    def loan(conn, self, id_user):
-        cursor = conn.cursor()
-        self.read_copy(conn, "WHERE available = 1;")
-        try:
-            id_copy = int(input("Entrez l'id du livre que vous souhaitez emprunté : "))
-        except ValueError:
-            print("Erreur : Vous devez entrer un chiffre.")
-            return
-        query = f"""
-                UPDATE copy SET id_user = {id_user}, available = 0 WHERE id_copy = {id_copy}
-                """
-        cursor.execute(query)
-        conn.commit()
-        print(f"Le livre a bien été prêté au lecteur n°{id_user}.")
-
-    def return_book(conn, id_user):
-        cursor = conn.cursor()
-        us.my_book(conn, id_user)
-        try:
-            id_copy = int(input("Entrez l'id du livre que vous souhaitez emprunté : "))
-        except ValueError:
-            print("Erreur : Vous devez entrer un chiffre.")
-            return
-        query = f"""
-                UPDATE copy SET id_user = NULL, available = 1 WHERE id_copy = {id_copy}
-                """
-        cursor.execute(query)
-        conn.commit()
-        print(f"Le livre a bien été retourné par le lecteur n°{id_user}.")
+    
 

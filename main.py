@@ -3,11 +3,6 @@ import book as bk
 import user as us
 import exemplaire as ex
 
-from kivy.app import App
-from kivy.uix.widget import Widget
-from kivy.uix.button import Button
-from kivy.uix.label import Label
-from kivy.uix.boxlayout import BoxLayout
 
 
 def connect_db():
@@ -20,15 +15,17 @@ def connect_db():
     return conn
 
 
-def read_bdd(conn, table, condition):
+def create_user(conn):
     cursor = conn.cursor()
-    query = "SELECT * FROM " + table 
-    if condition != "":
-        query += f" WHERE {condition}"
+    query = """SELECT COUNT(*) FROM `user`"""
     cursor.execute(query)
-    books = cursor.fetchall()
-    for book in books:
-        print(f"{book[0]}: {book[1]}, {book[2]}, {book[3]}, {book[4]}")
+    result = cursor.fetchone()
+    first_name = input("Prénom : ")
+    last_name = input("Nom : ")
+    year = int(input("Age : "))
+    email = input("Mail : ")
+    user = us.User(id_user=result, first_name=first_name, last_name=last_name, year=year, email=email)
+    return user
 
 
 def connection(conn):
@@ -56,19 +53,19 @@ def connection(conn):
                                 "\t0 - Se déconnecter\n"))
                 if action == 1:
                     print("\nVoici la liste des livres présents dans la bibliothèque :")
-                    user.consult_book(conn) #Fonction réglée
+                    user.consult_book(conn) 
                 elif action == 2:
-                    user.search_book(conn) #Fonction réglée
+                    user.search_book(conn) 
                 elif action == 3:
-                    user.read_copy(conn) #Fonction réglée
+                    user.read_copy(conn) 
                 elif action == 4:
-                    user.search_copy_specific(conn) #Fonction réglée
+                    user.search_copy_specific(conn) 
                 elif action == 5:
-                    user.my_book(conn) #Fonction réglée
+                    user.my_book(conn) 
                 elif action == 6:
-                    ex.loan(conn, id_user)
+                    user.loan(conn)     
                 elif action == 7:
-                    ex.return_book(conn, id_user)
+                    user.return_book(conn)
                 else :
                     print("Merci de votre visite et à bientôt", result[1], "!")
                     return
@@ -77,9 +74,9 @@ def connection(conn):
                 return
 
     else:
-        print("L'utilisateur n'existe pas encore. Veuillez vous inscrire.")
-        us.create_user(conn)
-        connection(conn)
+        print("L'utilisateur n'existe pas encore. Veuillez vous inscrire.\nInscription\n")
+        new_user = create_user(conn)
+        new_user.create_user(conn)
     # Fermeture du curseur et de la connexion
     cursor.close()
     conn.close()

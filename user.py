@@ -16,30 +16,12 @@ class User:
     def get_idUser(self):
         return self.id_user
 
-    def my_book(self, conn): #Fonction réglée
-        id_user = self.get_idUser()
-        cursor = conn.cursor()
-        query = """
-                    SELECT copy.id_copy AS Identifiant, book.title AS Titre, book.author AS Auteur, book.genre AS Genre, copy.state AS Etat, copy.langue AS Langue 
-                    FROM copy
-                    JOIN user ON copy.id_user = """ + str(id_user) + """
-                    JOIN book ON copy.id_book = book.id_book
-                """
-        cursor.execute(query)
-        results = cursor.fetchall()
-        if results:
-            for row in results:
-                print(row)
-        else:
-            print("Vous n'avez empruntés aucun livre.")
-
-
 #Fonction qui permet à l'utilisateur de s'inscrire
-    def create_user(conn, first_name, last_name, email, year):
+    def create_user(self, conn):
         #Vérification dans la base de données
         cursor = conn.cursor()
         # Vérification de l'existence de l'utilisateur dans la base de données
-        query = "SELECT * FROM user WHERE first_name = '%s' AND last_name = '%s'" % (first_name, last_name)
+        query = "SELECT * FROM user WHERE first_name = '%s' AND last_name = '%s'" % (self.first_name, self.last_name)
         cursor.execute(query)
         result = cursor.fetchone()
         if result:
@@ -47,14 +29,14 @@ class User:
         else:
             # Inscription de l'utilisateur
             query = "INSERT INTO user (first_name, last_name, email, years) VALUES (%s, %s, %s, %s)"
-            cursor.execute(query, (first_name, last_name, email, year))
+            cursor.execute(query, (self.first_name, self.last_name, self.email, self.year))
             conn.commit()
             print("Inscription réussie.")
         # Fermeture du curseur et de la connexion
         cursor.close()
         conn.close()
 
-    def consult_book(self, conn): #Fonction réglée
+    def consult_book(self, conn):
         cursor = conn.cursor()
         query = "SELECT id_book, title AS Titre, author AS Auteur, genre FROM book"
         cursor.execute(query)
@@ -62,7 +44,7 @@ class User:
         for book in books:
             print(book)
 
-    def search_book(self, conn): #Fonction réglée
+    def search_book(self, conn):
         title = input("Entrez le titre du livre : (laissez vide si vous ne le connaissez pas) ")
         author = input("Entrez le nom de l'auteur : (laissez vide si vous ne le connaissez pas) ")
         genre = input("Entrez le genre : (laissez vide si vous n'en avez pas) ")
@@ -81,7 +63,7 @@ class User:
         else:
             print("Aucun livre trouvé correspondant à ces critères.")
 
-    def read_copy(self, conn): #Fonction réglée
+    def read_copy(self, conn):
         cursor = conn.cursor()
         query = """
                 SELECT copy.id_copy AS "ID de l'exemplaire", book.title AS Titre, book.author AS Auteur, book.genre AS Genre, copy.state AS Etat, 
@@ -95,7 +77,7 @@ class User:
         for copy in copies:
             print(copy)
 
-    def search_copy_specific(self, conn): #Fonction réglée
+    def search_copy_specific(self, conn):
         cursor = conn.cursor()
         title = input("Entrez le titre du livre que vous recherchez : ")
         query = """SELECT copy.id_copy AS "ID de l'exemplaire", book.title AS Titre, book.author AS Auteur, book.genre AS Genre, copy.state AS Etat, copy.langue AS Langue FROM book JOIN copy ON book.id_book = copy.id_book WHERE book.title = """ '"' + title + '"  AND copy.available = 1'
@@ -106,3 +88,56 @@ class User:
                 print(copy)
         else :
             print("Aucun exemplaire n'a été trouvé pour ce livre.")
+
+    def my_book(self, conn): 
+        id_user = self.id_user
+        cursor = conn.cursor()
+        query = """
+                    SELECT copy.id_copy AS Identifiant, 
+                    book.title AS Titre, book.author AS Auteur, 
+                    book.genre AS Genre, copy.state AS Etat, copy.langue AS Langue 
+                    FROM copy
+                    JOIN book ON copy.id_book = book.id_book
+                    WHERE copy.id_user = """+ str(id_user) + """
+                """
+        cursor.execute(query)
+        results = cursor.fetchall()
+        if results:
+            for row in results:
+                print(row)
+        else:
+            print("Vous n'avez empruntés aucun livre.")
+
+
+    def loan(self, conn):
+        id_user = self.id_user
+        cursor = conn.cursor()
+        self.read_copy(conn)
+        try:
+            id_copy = int(input("Entrez l'id du livre que vous souhaitez emprunté : "))
+        except ValueError:
+            print("Erreur : Vous devez entrer un chiffre.")
+            return
+        query = f"""
+                UPDATE copy SET id_user = {id_user}, available = 0 WHERE id_copy = {id_copy}
+                """
+        cursor.execute(query)
+        conn.commit()
+        print(f"Le livre a bien été prêté au lecteur n°{id_user}.")
+    
+    
+    def return_book(self, conn):
+        id_user = self.id_user
+        cursor = conn.cursor()
+        self.my_book(conn)
+        try:
+            id_copy = int(input("Entrez l'id du livre que vous souhaitez emprunté : "))
+        except ValueError:
+            print("Erreur : Vous devez entrer un chiffre.")
+            return
+        query = f"""
+                UPDATE copy SET id_user = NULL, available = 1 WHERE id_copy = {id_copy}
+                """
+        cursor.execute(query)
+        conn.commit()
+        print(f"Le livre a bien été retourné par le lecteur n°{id_user}.")
