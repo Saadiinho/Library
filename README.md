@@ -30,7 +30,7 @@ Avant de commencer, assurez-vous que vous avez installé les éléments suivants
    ```bash
    cd chemin/vers/mon_projet
 
-5. Lancer MAMP et accéder à phpMyAdmin
+5. Lancez MAMP et accédez à phpMyAdmin
    
 6. Créez une base de données nommé library et importez dans cette base de données le fichier library.sql
 
