@@ -1,7 +1,6 @@
 import mysql.connector
 import book as bk
 import user as us
-import exemplaire as ex
 from getpass import getpass
 
 

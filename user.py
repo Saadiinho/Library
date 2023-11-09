@@ -1,8 +1,3 @@
-#Fonction qui permet à l'utilisateur de se connecter
-import book as bk
-import exemplaire as ex
-
-
 class User:
     def __init__(self, id_user: int, first_name: str, last_name: str, year: int, email: str, password: str):
         self.id_user = id_user

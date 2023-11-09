@@ -14,9 +14,3 @@ class Book:
         cursor.execute(query, (self.title, self.author, self.genre))
         conn.commit()
         print(f"Livre '{self.title}' ajouté avec succès.")
-
-
-    #Update : Fonction qui permet à l'administrateur de mettre à jour les données d'un livre dans la base de données
-    
-
-
