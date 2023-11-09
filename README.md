@@ -37,6 +37,3 @@ Avant de commencer, assurez-vous que vous avez installé les éléments suivants
    python main.py
 
 Il ne vous reste plus qu'à profiter de ce logiciel de gestion de bibliothèque !
-
-
-Voir la [source](https://www.kaggle.com/datasets/abecklas/fifa-world-cup) du dataset
