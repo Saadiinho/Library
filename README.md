@@ -5,10 +5,9 @@
 Ce guide explique comment pouvoir lancer ce logiciel sur votre ordinateur
 
 ## Prérequis
-
-**Les prérequis pour la base de données (MySQL) arrivent bientôt.**
-
 Avant de commencer, assurez-vous que vous avez installé les éléments suivants sur votre système :
+
+- [MAMP](https://www.mamp.info/en/downloads/): Un serveur pour exécuter du SQL.
 
 - [Python](https://www.python.org/downloads/): Le langage de programmation utilisé par ce logiciel.
 
@@ -31,7 +30,11 @@ Avant de commencer, assurez-vous que vous avez installé les éléments suivants
    ```bash
    cd chemin/vers/mon_projet
 
-5. Lancez le code en entrant la commande suivante dans votre terminal :
+5. Lancer MAMP et accéder à phpMyAdmin
+   
+6. Créez une base de données nommé library et importez dans cette base de données le fichier library.sql
+
+7. Lancez le code en entrant la commande suivante dans votre terminal :
 
    ```bash
    python main.py
