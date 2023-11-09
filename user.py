@@ -4,12 +4,13 @@ import exemplaire as ex
 
 
 class User:
-    def __init__(self, id_user: int, first_name: str, last_name: str, year: int, email: str):
+    def __init__(self, id_user: int, first_name: str, last_name: str, year: int, email: str, password: str):
         self.id_user = id_user
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
         self.year = year
+        self.password = password
 
     def get_data(self):
         return self.__dict__
@@ -141,3 +142,123 @@ class User:
         cursor.execute(query)
         conn.commit()
         print(f"Le livre a bien été retourné par le lecteur n°{id_user}.")
+
+    def delete_book(self, conn):
+        cursor = conn.cursor()
+        self.consult_book(conn)
+        try:
+            id = int(input("Choisissez l'identifiant du livre que vous souhaitez supprimer : "))
+        except ValueError:
+            print("Erreur : Vous devez entrer un chiffre.")
+            return
+        query = "DELETE FROM `book` WHERE `book`.`id_book` = " + str(id)
+        cursor.execute(query)
+        conn.commit()
+        print(f"Livre avec l'id {id} supprimé avec succès.\n")
+        
+    def update_book(self, conn):
+        cursor = conn.cursor()
+        self.consult_book(conn)
+        try:
+            id = int(input("Entrez l'id du livre que vous souhaitez modifié : "))
+        except ValueError:
+            print("Erreur : Vous devez entrer un chiffre.")
+            return
+        query = "SELECT * FROM book WHERE id_book = " + str(id)
+        cursor.execute(query)
+        books = cursor.fetchall()
+        for book in books :
+            print(book)
+        title = input(f"Entrez le nouveau titre : ('{book[1]}' si le nom ne change pas) ")
+        author = input(f"Entrez le nouvel auteur : ('{book[2]}' s'il n'y en a pas) ")
+        genre = input(f"Entrez le nouveau genre : ('{book[3]}' s'il n'y en a pas) ")
+        query = "UPDATE book SET title = %s, author = %s, genre = %s WHERE id_book = %s"
+        cursor.execute(query, (title, author, genre, id))
+        conn.commit()
+        print(f"Livre avec l'id {id} mise à jour avec succès.")
+
+    def create_copy(self, conn):
+        cursor = conn.cursor()
+        self.consult_book(conn)
+        try:
+            id_book = int(input("Entrez l'id du livre que vous souhaitez : "))
+        except ValueError:
+            print("Erreur : Vous devez entrer un chiffre.")
+            return
+        state = input("L'état de l'exemplaire : ")
+        if not state in ["Neuf", "Bon", "Moyen", "Mauvais"]:
+            print("Erreur : L'état doit être 'Neuf', 'Bon', 'Moyen' ou 'Mauvais'.")
+            return
+        available = int(input("1 s'il est disponible, 0 sinon : "))
+        if available != 0 and available != 1:
+            print("Erreur : Vous devez saisir 0 ou 1.")
+            return
+        langue = input("Entrez la langue de l'exemplaire : ")
+        if not langue in ["Français", "Anglais"]:
+            print("La bibliothèque ne stocke pas des livres d'autre langue que le français ou l'anglais")
+            return
+        query = """
+                INSERT INTO copy (id_book, state, available, langue)
+                VALUES
+                (%s, %s, %s, %s)
+                """
+        cursor.execute(query, (id_book, state, available, langue))
+        conn.commit()
+        print(f"Exemplaire ajouté avec succès.")
+
+    def update_copy(self, conn):
+        cursor = conn.cursor()
+        self.read_copy(conn)
+        try:
+            id = int(input("Entrez l'id de l'exemplaire que vous souhaitez modifié : (Les id sont rangé par ordre croissant) "))
+        except ValueError:
+            print("Erreur : Vous devez entrer un chiffre.")
+            return
+        query = "SELECT * FROM `copy` WHERE id_copy =" + str(id)
+        print(query)
+        cursor.execute(query)
+        copies = cursor.fetchall()
+        for copy in copies:
+            print(copy)
+        state = input(f"L'état de l'exemplaire : ('{copy[2]}' si l'état ne change pas) ")
+        if not state in ["Neuf", "Bon", "Moyen", "Mauvais"]:
+            print("Erreur : L'état doit être 'Neuf', 'Bon', 'Moyen' ou 'Mauvais'.")
+            return
+        langue = input(f"Entrez la langue de l'exemplaire : ('{copy[4]}' si la langue ne change pas)")
+        if not langue in ["Français", "Anglais", ""]:
+            print("La bibliothèque ne stocke pas des livres d'autre langue que le français ou l'anglais")
+            return
+        query = "UPDATE copy SET state = %s, langue = %s WHERE id_copy = %s"
+        cursor.execute(query, (state, langue, id))
+        conn.commit()
+        print(f"Livre avec l'id {id} mise à jour avec succès.")
+
+    def delete_copy(self, conn):
+        cursor = conn.cursor()
+        self.read_copy(conn)
+        try:
+            id = int(input("Choisissez l'identifiant du livre que vous souhaitez supprimer : "))
+        except ValueError:
+            print("Erreur : Vous devez entrer un chiffre.")
+            return
+        query = "DELETE FROM `copy` WHERE `copy`.`id_copy` = " + str(id)
+        cursor.execute(query)
+        conn.commit()
+        print(f"Livre avec l'id {id} supprimé avec succès.")
+
+    def delete_user(self, conn):
+        cursor = conn.cursor()
+        query = "SELECT id_user, first_name AS Prenom, last_name AS Nom, email FROM user"
+        cursor.execute(query)
+        books = cursor.fetchall()
+        for book in books:
+            print(book)
+        try:
+            id = int(input("Choisissez l'identifiant du l'utilisateur que vous souhaitez supprimer : "))
+        except ValueError:
+            print("Erreur : Vous devez entrer un chiffre.")
+            return
+        query = "DELETE FROM `user` WHERE `user`.`id_user` = " + str(id)
+        cursor.execute(query)
+        conn.commit()
+        print(f"L'utilisateur avec l'id {id} supprimé avec succès.")
