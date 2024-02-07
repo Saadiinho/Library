@@ -23,7 +23,12 @@ def create_user(conn):
     last_name = input("Nom : ")
     year = int(input("Age : "))
     email = input("Mail : ")
-    user = us.User(id_user=result, first_name=first_name, last_name=last_name, year=year, email=email)
+    password = getpass("Entrez votre mot de passe :")
+    password_confirm = getpass("Confirmez le mot de passe :")
+    while password != password_confirm:
+        password = getpass("Les mots de passe ne correspondent pas.\nVeuillez réessayer : ")
+        password_confirm = getpass("Confirmez le mot de passe :")
+    user = us.User(id_user=result, first_name=first_name, last_name=last_name, year=year, email=email, password=password)
     return user
 
 def create_book(conn):
@@ -48,10 +53,10 @@ def create_book(conn):
         book.create_book(conn)
 
 
-def connection(conn):
+def connection():
+    conn = connect_db()
     first_name = input("Entrez votre prénom :")
-    last_name = input("Entrez votre nom de famille :")
-    password = getpass()
+    password = getpass("Entrez votre mot de passe :")
     cursor = conn.cursor()
     query = "SELECT * FROM user WHERE first_name = '%s'" % (first_name)
     cursor.execute(query)
@@ -133,13 +138,12 @@ def connection(conn):
         print("L'utilisateur n'existe pas encore. Veuillez vous inscrire.\nInscription\n")
         new_user = create_user(conn)
         new_user.create_user(conn)
+        connection()
     # Fermeture du curseur et de la connexion
     cursor.close()
     conn.close()
 
 if __name__ == "__main__":
-   conn = connect_db()
-   connection(conn)
-   conn.close()
+   connection()
 
 
