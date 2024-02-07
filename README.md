@@ -2,7 +2,7 @@
 
 **Le projet n'est pas encore fini !**
 
-Ce guide explique comment pouvoir lancer ce logiciel sur votre ordinateur
+Ce guide explique comment pouvoir lancer ce logiciel sur votre ordinateur.
 
 ## Prérequis
 Avant de commencer, assurez-vous que vous avez installé les éléments suivants sur votre système :
