@@ -32,7 +32,7 @@ Avant de commencer, assurez-vous que vous avez installé les éléments suivants
 
 5. Lancez MAMP et accédez à phpMyAdmin
    
-6. Créez une base de données nommé library et importez dans cette base de données le fichier library.sql
+6. Créez une base de données nommée library et importez dans cette base de données le fichier library.sql
 
 7. Lancez le code en entrant la commande suivante dans votre terminal :
 
